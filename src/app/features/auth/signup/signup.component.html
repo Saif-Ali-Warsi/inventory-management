@@ -1,1 +1,29 @@
-<p>signup works!</p>
+<div class="main-container">
+  <h2>Signup</h2>
+
+  <form [formGroup]="form" (ngSubmit)="signup()">
+    <div class="form-field">
+      <input type="email" formControlName="email" placeholder="Email" />
+      <p *ngIf="form.controls.email.touched && form.controls.email.invalid">
+        Email is Required
+      </p>
+    </div>
+
+    <div class="form-field">
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+      <p
+        *ngIf="form.controls.password.touched && form.controls.password.invalid"
+      >
+        Password is Required
+      </p>
+    </div>
+
+    <button type="submit">Signup</button>
+
+    <p class="error-message">{{ error }}</p>
+  </form>
+</div>

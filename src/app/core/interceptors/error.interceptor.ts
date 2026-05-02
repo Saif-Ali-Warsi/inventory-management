@@ -1,0 +1,31 @@
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+
+  const router = inject(Router);
+
+  return next(req).pipe(
+    catchError((error) => {
+
+
+      if (error.status === 401) {
+        alert('Unauthorized. Please login again.');
+        router.navigate(['/login']);
+      }
+
+      if (error.status === 404) {
+        alert('Resource not found');
+      }
+
+      if (error.status === 500) {
+        alert('Internal server error');
+      }
+
+      return throwError(() => error);
+    })
+  );
+
+};
