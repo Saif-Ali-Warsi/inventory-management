@@ -1,6 +1,5 @@
 .active {
   color: orange;
-  font-weight: bold;
 }
 
 h2 {
@@ -13,6 +12,7 @@ li {
   font-size: 14px;
   text-transform: uppercase;
   margin: 0 0 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgb(248, 187, 187);
+  padding: 10px 4px;
+  border-radius: 6px;
+  border-bottom: 1px solid rgba(248, 134, 134, 0.402);
 }
