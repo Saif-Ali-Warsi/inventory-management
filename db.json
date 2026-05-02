@@ -42,7 +42,7 @@
       "name": "Laptop",
       "price": 55000,
       "categoryId": "1",
-      "isActive": false
+      "isActive": true
     },
     {
       "id": "102",
@@ -56,8 +56,7 @@
       "name": "Sofa",
       "price": 35000,
       "categoryId": "1",
-      "isActive": true,
-      "categoryName": "Electronics"
+      "isActive": false
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
