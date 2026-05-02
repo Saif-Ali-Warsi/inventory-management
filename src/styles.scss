@@ -1,1 +1,107 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  font-family: "Open Sans", sans-serif;
+  font-style: normal;
+  letter-spacing: 0.3px;
+  box-sizing: border-box;
+  color: #ffffff;
+  background-color: #262e2e;
+}
+
+input {
+  font-size: 14px;
+  color: #00ffff;
+  padding: 8px 10px;
+  height: 35px;
+  width: calc(100% - 20px);
+  background-color: unset;
+  border: 1px solid #00ffff;
+  border-radius: 4px;
+}
+
+select {
+  font-size: 14px;
+  color: #00ffff;
+  padding: 8px 10px;
+  height: 53px;
+  width: calc(100%);
+  background-color: unset;
+  border: 1px solid #00ffff;
+  border-radius: 4px;
+}
+
+button {
+  font-size: 15px;
+  font-weight: 500;
+  color: #00ffff;
+  background: unset;
+  padding: 8px 10px;
+  height: 45px;
+  min-width: 100px;
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+}
+
+.table-button {
+  padding: 4px 8px;
+  height: 35px;
+  width: 85px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+
+  li {
+    list-style-type: none;
+  }
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+a {
+  all: unset;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-center {
+  align-items: center;
+}
+
+.gap-15 {
+  gap: 15px;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.gap-5 {
+  gap: 5px;
+}
+
+.mx-500 {
+  max-width: 500px;
+}
+
+.box-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.form-field {
+  margin: 0 0 20px;
+}
+
+.error-message {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ff8b8b;
+}

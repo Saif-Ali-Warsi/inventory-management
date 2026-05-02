@@ -11,9 +11,9 @@ export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes, withHashLocation()), provideHttpClient(withInterceptors(
 
     [
+      authInterceptor,
       loadingInterceptor,
       errorInterceptor,
-      authInterceptor
     ]
   ))]
 };

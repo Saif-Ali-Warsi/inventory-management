@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   constructor(private productService: ProductService, private categoryService: CategoryService) { }
 
   ngOnInit() {
-
+    this.loadDashboard();
   }
 
   loadDashboard() {

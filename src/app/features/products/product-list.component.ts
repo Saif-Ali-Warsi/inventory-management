@@ -5,6 +5,8 @@ import { Product } from '../../core/models/product.model';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { RouterLink } from "@angular/router";
+import { combineLatest } from 'rxjs';
+import { CategoryService } from '../../core/services/category.service';
 
 @Component({
   selector: 'app-product-list',
@@ -15,45 +17,66 @@ import { RouterLink } from "@angular/router";
 })
 export class ProductListComponent implements OnInit {
 
-  products: Product[] = [];
+  products: any[] = [];
+  allProducts: any[] = [];
   search$ = new Subject<string>();
 
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private categoryService: CategoryService) { }
 
 
 
 
   ngOnInit(): void {
-    this.search$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap((term) => {
-        return this.productService.getProducts().pipe(
-          map(products => {
-            if (!term) return products;
 
-            return products.filter(p =>
-              p.name.toLowerCase().includes(term.toLowerCase())
-            )
-          })
-        )
-      })
-    )
+    this.loadProductsWithCategories();
+
+    this.search$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(term => {
+
+        if (!term) {
+          this.products = this.allProducts;
+          return;
+        }
+
+        this.products = this.allProducts.filter(p =>
+          p.name.toLowerCase().includes(term.toLowerCase())
+        );
+      });
   }
 
+  loadProductsWithCategories() {
+    combineLatest([
+      this.productService.getProducts(),
+      this.categoryService.getCategories()
+    ]).subscribe(([products, categories]) => {
 
-  loadProducts() {
-    this.productService.getProducts().subscribe(data => {
-      this.products = data;
+      const mapped = products.map(product => {
+        const category = categories.find(
+          c => c.id === product.categoryId
+        );
+
+        return {
+          ...product,
+          categoryName: category ? category.name : 'Unknown'
+        };
+      });
+
+      this.allProducts = mapped;
+      this.products = mapped;
     });
   }
+
 
   toggleStatus(product: Product) {
     const updated = { ...product, isActive: !product.isActive };
 
     this.productService.update(product.id, updated)
-      .subscribe(() => this.loadProducts());
+      .subscribe(() => this.loadProductsWithCategories());
   }
 
   deleteProduct(id: string) {
@@ -61,7 +84,7 @@ export class ProductListComponent implements OnInit {
 
     if (confirmDelete) {
       this.productService.delete(id).subscribe(() => {
-        this.loadProducts();
+        this.loadProductsWithCategories();
       })
     }
   }

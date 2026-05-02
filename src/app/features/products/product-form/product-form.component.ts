@@ -4,6 +4,9 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { ProductService } from '../../../core/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../../core/models/product.model';
+import { Category } from '../../../core/models/category.model';
+import { CategoryService } from '../../../core/services/category.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-product-form',
@@ -17,27 +20,34 @@ export class ProductFormComponent implements OnInit {
 
   isEdit = false;
   productId = '';
+  categories: Category[] = [];
+  products: any[] = [];
 
 
   form = new FormGroup({
     name: new FormControl('', Validators.required),
     price: new FormControl(0, [Validators.required]),
-    category: new FormControl('', Validators.required),
+    categoryId: new FormControl('', Validators.required),
     isActive: new FormControl(true)
   });
 
 
-  constructor(private service: ProductService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private productService: ProductService, private route: ActivatedRoute, private router: Router, private categoryService: CategoryService) { }
 
 
   ngOnInit(): void {
+
+    this.categoryService.getCategories()
+      .subscribe(data => this.categories = data);
+
+
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
       this.isEdit = true;
       this.productId = id;
 
-      this.service.getById(id).subscribe(product => {
+      this.productService.getById(id).subscribe(product => {
         this.form.patchValue(product);
       });
     }
@@ -57,15 +67,15 @@ export class ProductFormComponent implements OnInit {
       id: this.isEdit ? this.productId : Date.now().toString(),
       name: value.name || '',
       price: value.price || 0,
-      category: value.category || '',
+      categoryId: value.categoryId || '',
       isActive: value.isActive ?? true
 
     };
 
 
     const api$ = this.isEdit
-      ? this.service.update(this.productId, payload)
-      : this.service.create(payload);
+      ? this.productService.update(this.productId, payload)
+      : this.productService.create(payload);
 
     api$.subscribe(() => {
       this.router.navigate(['/products']);

@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@gmail.com",
+      "password": "admin123"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Electronics",
+      "isActive": true
+    },
+    {
+      "id": "2",
+      "name": "Clothing",
+      "isActive": true
+    },
+    {
+      "id": "3",
+      "name": "Furniture",
+      "isActive": true
+    }
+  ],
+  "products": [
+    {
+      "id": "101",
+      "name": "Laptop",
+      "price": 55000,
+      "categoryId": "1",
+      "isActive": false
+    },
+    {
+      "id": "102",
+      "name": "T-Shirt",
+      "price": 500,
+      "categoryId": "2",
+      "isActive": false
+    },
+    {
+      "id": "103",
+      "name": "Sofa",
+      "price": 35000,
+      "categoryId": "1",
+      "isActive": true,
+      "categoryName": "Electronics"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

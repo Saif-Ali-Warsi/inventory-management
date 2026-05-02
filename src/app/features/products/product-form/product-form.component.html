@@ -14,16 +14,20 @@
     </p>
   </div>
   <div class="form-field">
-    <input type="text" formControlName="category" placeholder="Category" />
-    <p *ngIf="form.controls.category.touched && form.controls.category.invalid">
-      Price required
-    </p>
-  </div>
+    <select formControlName="categoryId">
+      <option value="">Select Category</option>
 
-  <label>
-    <input type="checkbox" formControlName="isActive" />
-    Active
-  </label>
+      <option *ngFor="let cat of categories" [value]="cat.id">
+        {{ cat.name }}
+      </option>
+    </select>
+  </div>
+  <div class="form-field">
+    <label class="check-box">
+      <input type="checkbox" formControlName="isActive" />
+      Active
+    </label>
+  </div>
 
   <button type="submit">
     {{ isEdit ? "Update" : "Create" }}

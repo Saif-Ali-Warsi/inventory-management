@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Category } from '../models/category.model';
-import { environment } from '../../../environment/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class CategoryService {
     return this.http.put<Category>(`${this.baseUrl}/${id}`, category)
   }
 
-  declare(id: string) {
+  delete(id: string) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
