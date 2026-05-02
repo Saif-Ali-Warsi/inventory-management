@@ -1,0 +1,33 @@
+<h3>Products</h3>
+
+<input type="text" placeholder="Search product..." (input)="onSearch($event)" />
+
+<table class="product-table">
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products; trackBy: trackById">
+      <td>{{ product.name }}</td>
+      <td>{{ product.price | currency }}</td>
+      <td>
+        <button (click)="toggleStatus(product)">
+          {{ product.isActive ? "Deactivate" : "Activate" }}
+        </button>
+      </td>
+      <td>
+        <a [routerLink]="['/products/edit', product.id]" class="btn-edit"
+          >Edit</a
+        >
+        <button (click)="deleteProduct(product.id)" class="btn-delete">
+          Delete
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,31 @@
+<h2>{{ isEdit ? "Edit" : "Add" }} products</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="form-field">
+    <input type="text" formControlName="name" placeholder="Name" />
+    <p *ngIf="form.controls.name.touched && form.controls.name.invalid">
+      Name required
+    </p>
+  </div>
+  <div class="form-field">
+    <input type="number" formControlName="price" placeholder="Price" />
+    <p *ngIf="form.controls.price.touched && form.controls.price.invalid">
+      Price required
+    </p>
+  </div>
+  <div class="form-field">
+    <input type="text" formControlName="category" placeholder="Category" />
+    <p *ngIf="form.controls.category.touched && form.controls.category.invalid">
+      Price required
+    </p>
+  </div>
+
+  <label>
+    <input type="checkbox" formControlName="isActive" />
+    Active
+  </label>
+
+  <button type="submit">
+    {{ isEdit ? "Update" : "Create" }}
+  </button>
+</form>
