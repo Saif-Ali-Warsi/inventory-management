@@ -4,7 +4,10 @@
   <form [formGroup]="form" (ngSubmit)="login()">
     <div class="form-field">
       <input type="email" formControlName="email" placeholder="Email" />
-      <p *ngIf="form.controls.email.touched && form.controls.email.invalid">
+      <p
+        class="error-message"
+        *ngIf="form.controls.email.touched && form.controls.email.invalid"
+      >
         Email is Required
       </p>
     </div>
@@ -16,6 +19,7 @@
         placeholder="Password"
       />
       <p
+        class="error-message"
         *ngIf="form.controls.password.touched && form.controls.password.invalid"
       >
         Password is Required

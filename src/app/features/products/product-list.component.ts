@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/product.model';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { RouterLink } from "@angular/router";
 import { combineLatest } from 'rxjs';
 import { CategoryService } from '../../core/services/category.service';
+import { Category } from '../../core/models/category.model';
 
 @Component({
   selector: 'app-product-list',
@@ -18,35 +19,46 @@ import { CategoryService } from '../../core/services/category.service';
 export class ProductListComponent implements OnInit {
 
   products: any[] = [];
+  categories: Category[] = [];
   allProducts: any[] = [];
-  search$ = new Subject<string>();
+  search$ = new BehaviorSubject<string>('');
+  category$ = new BehaviorSubject<string>('');
 
 
   constructor(private productService: ProductService, private categoryService: CategoryService) { }
 
 
-
-
   ngOnInit(): void {
+
+
+    this.categoryService.getCategories()
+      .subscribe(data => this.categories = data);
 
     this.loadProductsWithCategories();
 
-    this.search$
-      .pipe(
+
+    combineLatest([
+      this.search$.pipe(
         debounceTime(300),
         distinctUntilChanged()
-      )
-      .subscribe(term => {
+      ),
+      this.category$
+    ]).subscribe(([searchTerm, categoryId]) => {
+      let filtered = this.allProducts;
 
-        if (!term) {
-          this.products = this.allProducts;
-          return;
-        }
+      if (searchTerm) {
+        const term = searchTerm.trim().toLowerCase();
 
-        this.products = this.allProducts.filter(p =>
-          p.name.toLowerCase().includes(term.toLowerCase())
-        );
-      });
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(term))
+      }
+
+      if (categoryId) {
+        filtered = filtered.filter(p => p.categoryId === categoryId)
+      }
+
+      this.products = filtered;
+    })
+
   }
 
   loadProductsWithCategories() {
@@ -91,6 +103,10 @@ export class ProductListComponent implements OnInit {
 
   onSearch(event: any) {
     this.search$.next(event.target.value);
+  }
+
+  onCategoryChange(event: any) {
+    this.category$.next(event.target.value);
   }
 
   trackById(index: number, item: Product) {

@@ -23,3 +23,16 @@
   color: rgb(248, 88, 88);
   margin-left: 10px;
 }
+
+.filter-container {
+  display: flex;
+  gap: 12px;
+
+  .search {
+    width: 70%;
+  }
+
+  .select {
+    width: 30%;
+  }
+}

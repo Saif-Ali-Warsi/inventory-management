@@ -1,6 +1,18 @@
 <h3>Products</h3>
-
-<input type="text" placeholder="Search product..." (input)="onSearch($event)" />
+<div class="filter-container">
+  <input
+    type="text"
+    class="search"
+    placeholder="Search product..."
+    (input)="onSearch($event)"
+  />
+  <select class="select" (change)="onCategoryChange($event)">
+    <option value="">All Categories</option>
+    <option *ngFor="let cat of categories" [value]="cat.id">
+      {{ cat.name }}
+    </option>
+  </select>
+</div>
 
 <table class="product-table">
   <thead>
