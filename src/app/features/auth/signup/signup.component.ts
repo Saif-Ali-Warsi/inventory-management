@@ -20,7 +20,8 @@ export class SignupComponent {
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(5)])
+    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    role: new FormControl('', Validators.required)
   })
 
   constructor(private auth: AuthService, private router: Router) { }
@@ -31,7 +32,7 @@ export class SignupComponent {
       return;
     }
 
-    const { email, password } = this.form.value;
+    const { email, password, role } = this.form.value;
 
     this.auth.checkEmailExists(email!).subscribe(exists => {
       if (exists) {
@@ -40,7 +41,7 @@ export class SignupComponent {
       }
 
 
-      this.auth.signup({ email: email!, password: password! })
+      this.auth.signup({ email: email!, password: password!, role: role! })
         .subscribe(() => {
           alert('Signup successful');
           this.router.navigate(['/login']);

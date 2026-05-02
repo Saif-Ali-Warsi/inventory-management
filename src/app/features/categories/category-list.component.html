@@ -1,0 +1,16 @@
+<h3>Categories</h3>
+
+<table class="product-table">
+  <thead>
+    <tr>
+      <th>Category Name</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cat of categories">
+      <td>{{ cat.name }}</td>
+      <td>{{ cat.isActive ? "Active" : "Inactive" }}</td>
+    </tr>
+  </tbody>
+</table>

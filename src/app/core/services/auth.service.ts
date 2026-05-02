@@ -26,6 +26,7 @@ export class AuthService {
         if (matched) {
           const fakeToken = 'fake-jwt-token';
           localStorage.setItem(this.tokenKey, fakeToken);
+          localStorage.setItem('user_role', matched.role);
           return true;
         }
         return false;
@@ -51,10 +52,15 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem('user_rol');
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getUserRole(): string | null {
+    return localStorage.getItem('user_role');
   }
 
   isLoggedIn(): boolean {
