@@ -10,6 +10,9 @@ import { CategoryService } from '../../core/services/category.service';
 import { Category } from '../../core/models/category.model';
 import { CurrencyPipe } from '@angular/common';
 import { ProductListUiComponent } from './product-list-ui/product-list-ui.component';
+import { Store } from '@ngrx/store';
+import * as ProductActions from '../../core/store/products/product.actions';
+import * as ProductSelectors from '../../core/store/products/product.selectors';
 
 @Component({
   selector: 'app-product-list',
@@ -28,17 +31,32 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  constructor(private productService: ProductService, private categoryService: CategoryService, private store: Store) { }
 
-  constructor(private productService: ProductService, private categoryService: CategoryService) { }
 
+
+  products$ = this.store.select(ProductSelectors.selectProducts);
+  loading$ = this.store.select(ProductSelectors.selectLoading);
 
   ngOnInit(): void {
+    this.store.dispatch(ProductActions.loadProducts());
+
+    this.categoryService.getCategories()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => this.categories = data);
+
+    this.products$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.allProducts = data;
+        this.products = data;
+      });
 
 
     this.categoryService.getCategories().pipe(takeUntil(this.destroy$))
       .subscribe(data => this.categories = data);
 
-    this.loadProductsWithCategories();
+
 
 
     combineLatest([
@@ -66,43 +84,23 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   }
 
-  loadProductsWithCategories() {
-    combineLatest([
-      this.productService.getProducts(),
-      this.categoryService.getCategories()
-    ]).subscribe(([products, categories]) => {
 
-      const mapped = products.map(product => {
-        const category = categories.find(
-          c => c.id === product.categoryId
-        );
-
-        return {
-          ...product,
-          categoryName: category ? category.name : 'Unknown'
-        };
-      });
-
-      this.allProducts = mapped;
-      this.products = mapped;
-    });
-  }
 
 
   toggleStatus(product: Product) {
     const updated = { ...product, isActive: !product.isActive };
 
     this.productService.update(product.id, updated)
-      .subscribe(() => this.loadProductsWithCategories());
+      .subscribe(() => {
+        this.store.dispatch(ProductActions.loadProducts());
+      });
   }
 
   deleteProduct(id: string) {
-    const confirmDelete = confirm('Are you sure?');
-
-    if (confirmDelete) {
+    if (confirm('Are you sure?')) {
       this.productService.delete(id).subscribe(() => {
-        this.loadProductsWithCategories();
-      })
+        this.store.dispatch(ProductActions.loadProducts());
+      });
     }
   }
 

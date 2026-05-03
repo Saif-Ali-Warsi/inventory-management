@@ -40,22 +40,26 @@
     {
       "id": "101",
       "name": "Laptop",
-      "price": 55000,
+      "price": 25000,
       "categoryId": "1",
-      "isActive": true
+      "isActive": true,
+      "tags": [
+        "NEW"
+      ],
+      "categoryName": "Electronics"
     },
     {
       "id": "102",
       "name": "T-Shirt",
-      "price": 500,
+      "price": 1000,
       "categoryId": "2",
       "isActive": false,
-      "categoryName": "Clothing"
+      "tags": []
     },
     {
       "id": "103",
       "name": "Sofa",
-      "price": 35000,
+      "price": 20000,
       "categoryId": "1",
       "isActive": false,
       "tags": [
