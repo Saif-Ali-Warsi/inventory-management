@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { Product } from '../../../core/models/product.model';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-product-list-ui',
   standalone: true,
   imports: [CommonModule, RouterLink, CurrencyPipe],
   templateUrl: './product-list-ui.component.html',
-  styleUrl: './product-list-ui.component.scss'
+  styleUrl: './product-list-ui.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductListUiComponent {
 
