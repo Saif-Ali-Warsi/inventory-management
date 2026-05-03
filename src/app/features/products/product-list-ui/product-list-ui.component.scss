@@ -1,0 +1,38 @@
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.product-table th,
+.product-table td {
+  font-size: 14px;
+  border: 1px solid aqua;
+  padding: 12px;
+  text-align: left;
+}
+
+.product-table th {
+  color: aqua;
+  font-weight: 500;
+  background-color: black;
+}
+
+.btn-delete {
+  cursor: pointer;
+  color: rgb(248, 88, 88);
+  margin-left: 10px;
+}
+
+.filter-container {
+  display: flex;
+  gap: 12px;
+
+  .search {
+    width: 70%;
+  }
+
+  .select {
+    width: 30%;
+  }
+}

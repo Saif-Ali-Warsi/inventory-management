@@ -14,37 +14,8 @@
   </select>
 </div>
 
-<table class="product-table">
-  <thead>
-    <tr>
-      <th>Product Name</th>
-      <th>Price</th>
-      <th class="text-center">Status</th>
-      <th class="text-center">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let product of products; trackBy: trackById">
-      <td>{{ product.name }}</td>
-      <td>{{ product.price | currency: "₹" }}</td>
-      <td class="text-center">
-        <button class="btn-edit table-button" (click)="toggleStatus(product)">
-          {{ product.isActive ? "Deactivate" : "Activate" }}
-        </button>
-      </td>
-      <td class="text-center">
-        <a
-          [routerLink]="['/products/edit', product.id]"
-          class="btn-edit table-button"
-          >Edit</a
-        >
-        <button
-          (click)="deleteProduct(product.id)"
-          class="btn-delete table-button"
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<app-product-list-ui
+  [products]="products"
+  (toggle)="toggleStatus($event)"
+  (delete)="deleteProduct($event)"
+></app-product-list-ui>

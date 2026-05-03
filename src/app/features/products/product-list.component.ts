@@ -9,11 +9,12 @@ import { combineLatest } from 'rxjs';
 import { CategoryService } from '../../core/services/category.service';
 import { Category } from '../../core/models/category.model';
 import { CurrencyPipe } from '@angular/common';
+import { ProductListUiComponent } from './product-list-ui/product-list-ui.component';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, CurrencyPipe],
+  imports: [CommonModule, ProductListUiComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
