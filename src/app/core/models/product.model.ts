@@ -4,4 +4,5 @@ export interface Product {
     price: number;
     categoryId: string;
     isActive: boolean;
+    tags: string[];
 }

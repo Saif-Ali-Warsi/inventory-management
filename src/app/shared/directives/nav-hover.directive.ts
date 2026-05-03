@@ -11,7 +11,7 @@ export class NavHoverDirective {
     this.renderer.setStyle(
       this.el.nativeElement,
       'transition',
-      'background-color 0.3s ease'
+      'background-color 0.6s ease'
     )
   }
 
@@ -20,7 +20,7 @@ export class NavHoverDirective {
     this.renderer.setStyle(
       this.el.nativeElement,
       'backgroundColor',
-      '#00ffff4b'
+      '#ffa60057'
     );
 
     this.renderer.setStyle(

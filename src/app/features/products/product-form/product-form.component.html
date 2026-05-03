@@ -29,7 +29,19 @@
     </label>
   </div>
 
-  <button type="submit">
-    {{ isEdit ? "Update" : "Create" }}
-  </button>
+  <div class="form-field" formArrayName="tags">
+    <div class="tags-form" *ngFor="let tag of tags.controls; let i = index">
+      <input [formControlName]="i" placeholder="Enter tag" />
+      <button class="danger-style-btn" type="button" (click)="removeTag(i)">
+        Remove
+      </button>
+    </div>
+  </div>
+
+  <div class="btn-controls">
+    <button type="button" (click)="addTag()">+Add Tag</button>
+    <button type="submit">
+      {{ isEdit ? "Update" : "Create" }}
+    </button>
+  </div>
 </form>

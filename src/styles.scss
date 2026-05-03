@@ -31,6 +31,7 @@ select {
 }
 
 button {
+  cursor: pointer;
   font-size: 15px;
   font-weight: 500;
   color: #00ffff;
@@ -104,4 +105,9 @@ a {
   font-size: 0.875rem;
   font-weight: 500;
   color: #ff8b8b;
+}
+
+.danger-style-btn {
+  color: #ff0000;
+  border: 1px solid #ff0000;
 }

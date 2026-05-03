@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../../core/models/product.model';
 import { Category } from '../../../core/models/category.model';
 import { CategoryService } from '../../../core/services/category.service';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-product-form',
@@ -15,7 +16,7 @@ import { combineLatest } from 'rxjs';
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.scss'
 })
-export class ProductFormComponent implements OnInit {
+export class ProductFormComponent implements OnInit, OnDestroy {
 
 
   isEdit = false;
@@ -23,16 +24,30 @@ export class ProductFormComponent implements OnInit {
   categories: Category[] = [];
   products: any[] = [];
 
+  private destroy$ = new Subject<void>();
+
+  constructor(private productService: ProductService, private route: ActivatedRoute, private router: Router, private categoryService: CategoryService) { }
 
   form = new FormGroup({
     name: new FormControl('', Validators.required),
     price: new FormControl(0, [Validators.required]),
     categoryId: new FormControl('', Validators.required),
-    isActive: new FormControl(true)
+    isActive: new FormControl(true),
+    tags: new FormArray<FormControl<string>>([])
   });
 
+  get tags(): FormArray {
+    return this.form.get('tags') as FormArray
+  }
 
-  constructor(private productService: ProductService, private route: ActivatedRoute, private router: Router, private categoryService: CategoryService) { }
+
+  addTag() {
+    this.tags.push(new FormControl(''));
+  }
+
+  removeTag(index: number) {
+    this.tags.removeAt(index);
+  }
 
 
   ngOnInit(): void {
@@ -47,10 +62,54 @@ export class ProductFormComponent implements OnInit {
       this.isEdit = true;
       this.productId = id;
 
+      this.productService.getById(id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(product => {
+
+          this.form.patchValue({
+            name: product.name,
+            price: product.price,
+            categoryId: product.categoryId,
+            isActive: product.isActive
+          });
+
+          this.tags.clear();
+
+          if (product.tags?.length) {
+            product.tags.forEach(tag => {
+              this.tags.push(new FormControl(tag));
+            });
+          }
+
+        });
+    }
+
+
+
+
+
+
+    if (id) {
+      this.isEdit = true;
+      this.productId = id;
+
       this.productService.getById(id).subscribe(product => {
-        this.form.patchValue(product);
+        this.form.patchValue({
+          name: product.name,
+          price: product.price,
+          categoryId: product.categoryId,
+          isActive: product.isActive
+        });
       });
     }
+
+
+
+
+
+
+
+
 
   }
 
@@ -68,7 +127,8 @@ export class ProductFormComponent implements OnInit {
       name: value.name || '',
       price: value.price || 0,
       categoryId: value.categoryId || '',
-      isActive: value.isActive ?? true
+      isActive: value.isActive ?? true,
+      tags: value.tags || []
 
     };
 
@@ -81,6 +141,11 @@ export class ProductFormComponent implements OnInit {
       this.router.navigate(['/products']);
     });
 
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
 }

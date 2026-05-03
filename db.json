@@ -56,7 +56,12 @@
       "name": "Sofa",
       "price": 35000,
       "categoryId": "1",
-      "isActive": false
+      "isActive": false,
+      "tags": [
+        "a",
+        "b",
+        "c"
+      ]
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

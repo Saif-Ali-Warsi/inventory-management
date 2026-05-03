@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/product.model';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map, takeUntil } from 'rxjs/operators';
 import { RouterLink } from "@angular/router";
 import { combineLatest } from 'rxjs';
 import { CategoryService } from '../../core/services/category.service';
@@ -16,13 +16,15 @@ import { Category } from '../../core/models/category.model';
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
 
   products: any[] = [];
   categories: Category[] = [];
   allProducts: any[] = [];
   search$ = new BehaviorSubject<string>('');
   category$ = new BehaviorSubject<string>('');
+
+  private destroy$ = new Subject<void>();
 
 
   constructor(private productService: ProductService, private categoryService: CategoryService) { }
@@ -31,7 +33,7 @@ export class ProductListComponent implements OnInit {
   ngOnInit(): void {
 
 
-    this.categoryService.getCategories()
+    this.categoryService.getCategories().pipe(takeUntil(this.destroy$))
       .subscribe(data => this.categories = data);
 
     this.loadProductsWithCategories();
@@ -40,7 +42,8 @@ export class ProductListComponent implements OnInit {
     combineLatest([
       this.search$.pipe(
         debounceTime(300),
-        distinctUntilChanged()
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
       ),
       this.category$
     ]).subscribe(([searchTerm, categoryId]) => {
@@ -111,5 +114,10 @@ export class ProductListComponent implements OnInit {
 
   trackById(index: number, item: Product) {
     return item.id;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
