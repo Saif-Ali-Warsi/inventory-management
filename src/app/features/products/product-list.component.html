@@ -26,7 +26,7 @@
   <tbody>
     <tr *ngFor="let product of products; trackBy: trackById">
       <td>{{ product.name }}</td>
-      <td>₹{{ product.price }}</td>
+      <td>{{ product.price | currency: "₹" }}</td>
       <td class="text-center">
         <button class="btn-edit table-button" (click)="toggleStatus(product)">
           {{ product.isActive ? "Deactivate" : "Activate" }}

@@ -8,11 +8,12 @@ import { RouterLink } from "@angular/router";
 import { combineLatest } from 'rxjs';
 import { CategoryService } from '../../core/services/category.service';
 import { Category } from '../../core/models/category.model';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CurrencyPipe],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
